@@ -1,4 +1,4 @@
-(defproject minerva "1.0.0-SNAPSHOT"
+(defproject talos "1.0.0-SNAPSHOT"
   :description "Providing finite state machines to manage application state flows."
 
   :dependencies

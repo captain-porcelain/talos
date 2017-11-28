@@ -53,39 +53,39 @@
 
 (defn verify-state
   "Verify that the from-state of a transition matches the state of the fsm."
-  [my-fsm transition]
+  [afsm transition]
   (or
-    (= (:name @(:state my-fsm)) (:from transition))
+    (= (:name @(:state afsm)) (:from transition))
     (= :* (:from transition))))
 
 (defn handle-callback
   "Ensure that a callback is executed if one is associated with a state."
-  [my-fsm state event]
-  (when-not (nil? (:callback state)) ((:callback state) my-fsm event)))
+  [afsm state event]
+  (when-not (nil? (:callback state)) ((:callback state) afsm event)))
 
 (defn data
   "Get the data associated with the given fsm."
-  ([my-fsm]
-   @(:data my-fsm))
-  ([my-fsm item]
-   (item @(:data my-fsm))))
+  ([afsm]
+   @(:data afsm))
+  ([afsm item]
+   (item @(:data afsm))))
 
 (defn data!
   "Alter the data associated with the given fsm."
-  [my-fsm alter-fn]
-  (swap! (:data my-fsm) alter-fn))
+  [afsm alter-fn]
+  (swap! (:data afsm) alter-fn))
 
 (defn process!
   "Process an event on an fsm and update the internal state."
-  [my-fsm event]
-  (let [transition (get-transition (:transitions my-fsm) (:name @(:state my-fsm)) event (data my-fsm))]
-    (when (verify-state my-fsm transition)
-      (let [to (get-state (:to transition) (:states my-fsm))]
-        (reset! (:state my-fsm) to)
-        (handle-callback my-fsm to event)))))
+  [afsm event]
+  (let [transition (get-transition (:transitions afsm) (:name @(:state afsm)) event (data afsm))]
+    (when (verify-state afsm transition)
+      (let [to (get-state (:to transition) (:states afsm))]
+        (reset! (:state afsm) to)
+        (handle-callback afsm to event)))))
 
 (defn reinit!
   "Reset the state of the FSM."
-  [my-fsm]
-  (reset! (:data my-fsm)  {})
-  (reset! (:state my-fsm) (:initial my-fsm)))
+  [afsm]
+  (reset! (:data afsm)  {})
+  (reset! (:state afsm) (:initial afsm)))
