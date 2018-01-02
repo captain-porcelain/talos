@@ -3,9 +3,9 @@
 
   :dependencies
   [;; core dependencies
-   [org.clojure/clojure "1.9.0-alpha14"]
+   [org.clojure/clojure "1.9.0"]
    [mount "0.1.11"]
-   [com.taoensso/timbre "4.8.0"]]
+   [com.taoensso/timbre "4.10.0"]]
 
   :plugins
   [[lein-marginalia "0.9.0"]]
