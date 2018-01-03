@@ -1,4 +1,4 @@
-(defproject talos "1.0.1-SNAPSHOT"
+(defproject talos "1.0.1"
   :description "Providing finite state machines to manage application state flows."
 
   :dependencies
