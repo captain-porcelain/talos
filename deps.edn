@@ -1,0 +1,12 @@
+{:deps
+ {org.clojure/clojure           {:mvn/version "1.9.0"}
+  mount                         {:mvn/version "0.1.11"}
+  com.taoensso/timbre           {:mvn/version "4.10.0"}}
+ :paths ["src/clj" "src/cljc"]
+ :aliases
+ {:hibiscus
+  {:extra-paths ["test"]
+   :extra-deps
+   {sanakan/hibiscus            {:git/url "gitea@git.pinktentacle.net:sanakan/hibiscus.git"
+                                 :sha "d58b2992357097cb1a7319cfb8dbb4f35a47b83c"
+                                 :deps/manifest :deps}}}}}
