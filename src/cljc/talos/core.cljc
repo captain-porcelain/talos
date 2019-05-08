@@ -79,10 +79,12 @@
   "Process an event on an fsm and update the internal state."
   [afsm event]
   (let [transition (get-transition (:transitions afsm) (:name @(:state afsm)) event (data afsm))]
-    (when (verify-state afsm transition)
-      (let [to (get-state (:to transition) (:states afsm))]
+    (if (verify-state afsm transition)
+      (let [to (get-state (:to transition) (:states afsm))
+            tmp (log/info (str "Processing event " (:event event) " in state " (:name @(:state afsm))))]
         (reset! (:state afsm) to)
-        (handle-callback afsm to event)))))
+        (handle-callback afsm to event))
+      (log/info (str "Ignoring event " (:event event) " in state " (:name @(:state afsm)))))))
 
 (defn reinit!
   "Reset the state of the FSM."
