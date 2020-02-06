@@ -34,3 +34,4 @@ resources/js/minerva/
 
 resources/js/markdown/
 .cpcache
+.lsp
