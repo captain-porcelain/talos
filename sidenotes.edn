@@ -1,0 +1,4 @@
+{:projectname "Talos"
+ :description "A finite state machine to manaage possible states in applications."
+ :output-to "docs"
+ :theme "sidenotes"}
