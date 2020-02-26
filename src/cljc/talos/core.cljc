@@ -4,7 +4,7 @@
 
 ;; Create one state for use in the FSM.
 ;; The optional callback is called if the state is entered.
-;; It will receive the tranisition that triggered it as a parameter.
+;; It will receive the transition that triggered it as a parameter.
 (defrecord State [name callback])
 (defn state
   ([name] (State. name nil))
