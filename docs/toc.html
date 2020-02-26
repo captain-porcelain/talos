@@ -29,7 +29,7 @@
     &#40;talos/transition :all-to-a :&#42; :a&#41;&#41;&#41;
 
 &#40;def fsm &#40;talos/fsm states transitions&#41;&#41;
-</code></pre><p>A state is identified by a keyword and may have an optional callback that is executed when the fsm enters that state.</p><p>Transitions are triggered by an event like :a-to-b and must give the state in which the event is accepted as well as the state that is to entered next. The special state :* can be used to indicate that an event is accepted in any state.</p><p>A transition is triggered when the fsm processes an event, which can have optional data associated.</p><pre><code class="clojure">&#40;talos/process! fsm {:event :a-to-b}&#41;
+</code></pre><p>A state is identified by a keyword and may have an optional callback that is executed when the fsm enters that state.</p><p>Transitions are triggered by an event like :a-to-b and must give the state in which the event is accepted as well as the state that is to be entered next. The special state :* can be used to indicate that an event is accepted in any state.</p><p>A transition is triggered when the fsm processes an event, which can have optional data associated.</p><pre><code class="clojure">&#40;talos/process! fsm {:event :a-to-b}&#41;
 
 &#40;talos/process! fsm {:event :a-to-b :something :value}&#41;
 </code></pre><p>The event is handed to callback functions with the fsm itself:</p><pre><code class="clojure">&#40;defn state-callback
@@ -39,9 +39,9 @@
 
 &#40;talos/data fsm :my-key&#41;
 </code></pre><p>Transitions additionally may have a condition function that is evaluated upon the event and the state progression is performed only if the condition is evaluated as true:</p><pre><code class="clojure">&#40;def transitions
-	&#40;list
-		&#40;talos/transition :a-to-b :a :b &#40;fn &#91;event data&#93; &#40;= :value &#40;:something event&#41;&#41;&#41;&#41;
-		&#40;talos/transition :a-to-b :a :c&#41;&#41;&#41;
+  &#40;list
+    &#40;talos/transition :a-to-b :a :b &#40;fn &#91;event data&#93; &#40;= :value &#40;:something event&#41;&#41;&#41;&#41;
+    &#40;talos/transition :a-to-b :a :c&#41;&#41;&#41;
 </code></pre><p>The condition function is handed the event and the contents data atom of the fsm for the evaluation.</p></div>
 			<div class="box subheader">
 				<h3>Dependencies</h3>
