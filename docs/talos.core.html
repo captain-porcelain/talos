@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" content="text/html" http-equiv="Content-Type" />
+		<meta content="A finite state machine to manaage possible states in applications." name="description" />
+		<title>Talos</title>
+		<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/sidenotes.css" />
+ 		<link rel="stylesheet" type="text/css" href="css/shCore.css" />
+		<link rel="stylesheet" type="text/css" href="css/shThemeSidenotes.css" />
+		<style type="text/css">.syntaxhighlighter{overflow:hidden !important;}</style>
+		<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="js/xregexp-min.js"></script>
+		<script type="text/javascript" src="js/shCore.js"></script>
+		<script type="text/javascript" src="js/shBrushClojure.js"></script>
+	</head>
+	<body>
+		<div class="gridlayout">
+			<div class="box header">
+				<h1 class="project-name">talos.core</h1>
+				<a class="toc-link" href="toc.html">table of contents</a>
+			</div>
+			<div class="box section">
+				
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(ns talos.core
+  (:require
+    [taoensso.timbre :as log]))</pre>
+			</div>
+			<div class="box section">
+				<p>Create one state for use in the FSM. The optional callback is called if the state is entered. It will receive the tranisition that triggered it as a parameter.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defrecord State [name callback])
+(defn state
+  ([name] (State. name nil))
+  ([name callback] (State. name callback)))</pre>
+			</div>
+			<div class="box section">
+				<p>Create one transition for use in the FSM. The event can be anything that should trigger this transition. The from and to are the names of the involved states. An optional condition can be given that is tested before the state is changed.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defrecord Transition [event from to condition])
+(defn transition
+  ([event from to] (Transition. event from to nil))
+  ([event from to condition] (Transition. event from to condition)))</pre>
+			</div>
+			<div class="box section">
+				<p>Create an FSM with states and transitions. The optional state is used as the initial state. If it is not given the first of the states is used instead.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defrecord Fsm [states transitions state initial data])
+(defn fsm
+  ([states transitions]
+    (Fsm. states transitions (atom (first states)) (first states) (atom {})))
+  ([states transitions state]
+    (Fsm. states transitions (atom state) state (atom {}))))</pre>
+			</div>
+			<div class="box section">
+				<p>Check that the second transitions event matches the firsts and the condition is met.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defn matches?
+  [t1 event data state]
+  (and
+    (or
+      (= state (:from t1))
+      (= :* (:from t1)))
+    (= (:event t1) (:event event))
+    (if-not (nil? (:condition t1))
+      ((:condition t1) event data)
+      true)))</pre>
+			</div>
+			<div class="box section">
+				<p>From the list of transitions find the one where the event and state match the given transition.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defn get-transition
+  [transitions state event data]
+  (first (filter #(matches? % event data state) transitions)))</pre>
+			</div>
+			<div class="box section">
+				<p>Get a state by name.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defn get-state
+  [name states]
+  (first (filter #(= name (:name %)) states)))</pre>
+			</div>
+			<div class="box section">
+				<p>Verify that the from-state of a transition matches the state of the fsm.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defn verify-state
+  [afsm transition]
+  (or
+    (= (:name @(:state afsm)) (:from transition))
+    (= :* (:from transition))))</pre>
+			</div>
+			<div class="box section">
+				<p>Ensure that a callback is executed if one is associated with a state.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defn handle-callback
+  [afsm state event]
+  (when-not (nil? (:callback state)) ((:callback state) afsm event)))</pre>
+			</div>
+			<div class="box section">
+				<p>Get the data associated with the given fsm.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defn data
+  ([afsm]
+   @(:data afsm))
+  ([afsm item]
+   (item @(:data afsm))))</pre>
+			</div>
+			<div class="box section">
+				<p>Alter the data associated with the given fsm.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defn data!
+  [afsm alter-fn]
+  (swap! (:data afsm) alter-fn))</pre>
+			</div>
+			<div class="box section">
+				<p>Process an event on an fsm and update the internal state.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defn process!
+  [afsm event]
+  (let [transition (get-transition (:transitions afsm) (:name @(:state afsm)) event (data afsm))]
+    (if (verify-state afsm transition)
+      (let [to (get-state (:to transition) (:states afsm))
+            tmp (log/info (str &quot;Processing event &quot; (:event event) &quot; in state &quot; (:name @(:state afsm))))]
+        (reset! (:state afsm) to)
+        (handle-callback afsm to event))
+      (log/info (str &quot;Ignoring event &quot; (:event event) &quot; in state &quot; (:name @(:state afsm)))))))</pre>
+			</div>
+			<div class="box section">
+				<p>Reset the state of the FSM.</p>
+			</div>
+			<div class="box section">
+				<pre class="brush: clojure">(defn reinit!
+  [afsm]
+  (reset! (:data afsm)  {})
+  (reset! (:state afsm) (:initial afsm)))</pre>
+			</div>
+			<div class="box footer">
+				Generated by <a href="https://github.com/captain-porcelain/sidenotes">Sidenotes</a>.
+				&nbsp;&nbsp;
+				Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/app.js"></script>
+	</body>
+</html>
