@@ -32,7 +32,7 @@ A talos fsm is defined by a list of states and a map of transitions between them
 A state is identified by a keyword and may have an optional callback that is executed when the fsm enters that state.
 
 Transitions are triggered by an event like :a-to-b and must give the state in which the event is accepted as well as the state
-that is to entered next. The special state :* can be used to indicate that an event is accepted in any state.
+that is to be entered next. The special state :* can be used to indicate that an event is accepted in any state.
 
 A transition is triggered when the fsm processes an event, which can have optional data associated.
 
@@ -63,9 +63,9 @@ only if the condition is evaluated as true:
 
 ```clojure
 (def transitions
-	(list
-		(talos/transition :a-to-b :a :b (fn [event data] (= :value (:something event))))
-		(talos/transition :a-to-b :a :c)))
+  (list
+    (talos/transition :a-to-b :a :b (fn [event data] (= :value (:something event))))
+    (talos/transition :a-to-b :a :c)))
 ```
 
 The condition function is handed the event and the contents data atom of the fsm for the evaluation.
