@@ -8,10 +8,10 @@ In this case pirates and invaders are state and state transitions.
 
 The sidenotes documentation for talos can be found [here](https://captain-porcelain.github.io/talos/toc.html).
 
-An example for the usage in a CLJS frontend can be seen in my other project [Somerville](https://github.com/captain-porcelain/somerville/blob/master/src/cljs/somerville/visualization/gaia.cljs).
-
 Talos is a small library that implements a finite state machine that can be used to manage the state
 of an application and the transitions from one state to another.
+
+An example for the usage in a CLJS frontend can be seen in my other project [Somerville](https://github.com/captain-porcelain/somerville/blob/master/src/cljs/somerville/visualization/gaia.cljs).
 
 A talos fsm is defined by a list of states and a map of transitions between them:
 
