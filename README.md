@@ -6,10 +6,10 @@
 
 In this case pirates and invaders are state and state transitions.
 
-The sidenotes documentation for talos can be found [here](https://captain-porcelain.github.io/talos/toc.html)
+The sidenotes documentation for talos can be found [here](https://captain-porcelain.github.io/talos/toc.html).
 
-Talos is small library that implements a finite state machine that can be used to manage an applications state
-and the transitions from one to another.
+Talos is a small library that implements a finite state machine that can be used to manage the state
+of an application and the transitions from one state to another.
 
 A talos fsm is defined by a list of states and a map of transitions between them:
 
@@ -29,12 +29,12 @@ A talos fsm is defined by a list of states and a map of transitions between them
 (def fsm (talos/fsm states transitions))
 ```
 
-A state is identified by a keyword and may have an optional callback that is executed when the fsm enters that state.
+A state is identified by a keyword and may have an optional callback that is executed when the `fsm` enters that state.
 
-Transitions are triggered by an event like :a-to-b and must give the state in which the event is accepted as well as the state
-that is to be entered next. The special state :* can be used to indicate that an event is accepted in any state.
+Transitions are defined by an event like `:a-to-b` as well as the state in which the event is accepted and the state
+that is to be entered next. The special state `:*` can be used to indicate that an event is accepted in any state.
 
-A transition is triggered when the fsm processes an event, which can have optional data associated.
+A transition is triggered when the `fsm` processes an event which can have optional data associated.
 
 ```clojure
 (talos/process! fsm {:event :a-to-b})
@@ -42,7 +42,7 @@ A transition is triggered when the fsm processes an event, which can have option
 (talos/process! fsm {:event :a-to-b :something :value})
 ```
 
-The event is handed to callback functions with the fsm itself:
+The event is handed to callback functions with the `fsm` itself:
 
 ```clojure
 (defn state-callback
@@ -50,7 +50,7 @@ The event is handed to callback functions with the fsm itself:
   (println (:something source-event)))
 ```
 
-The fsm also wraps an atom that contains a map and which can be accessed like this:
+The `fsm` also wraps an atom that contains a map and which can be accessed like this:
 
 ```clojure
 (talos/data! fsm #(assoc % :my-key :my-value))
