@@ -6,7 +6,7 @@
 
 In this case pirates and invaders are state and state transitions.
 
-The sidenotes documentation for talos can be found [here](https://captain-porcelain.github.io/talos/toc.html).
+The sidenotes documentation for talos can be found [here](https://captain-porcelain.github.io/talos/index.html).
 
 Talos is a small library that implements a finite state machine that can be used to manage the state
 of an application and the transitions from one state to another.

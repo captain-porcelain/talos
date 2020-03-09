@@ -1,4 +1,5 @@
 {:projectname "Talos"
  :description "A finite state machine to manaage possible states in applications."
  :output-to "docs"
+ :toc-filename "index.html"
  :theme "sidenotes"}
